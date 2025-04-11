@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Your Address</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="jquery.js"></script>
+    <script src="app.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+</head>
+
+<body>
+    <nav id="navbar">
+        <div id="nav-left" class="nav-left">
+            <a href="#" class="logo">Logo</a>
+            <ul class="nav-menu">
+                <li><a href="fashion.html">Fashion</a> </li>
+                <li><a href="electronic.html">Electronic</a></li>
+                <li><a href="homecate.html">Home</a></li>
+                <li><a href="toys.html">Toys</a></li>
+                <li><a href="beauty.html">Beauty</a></li>
+                <li><a href="appliances.html">Aplliances</a></li>
+
+            </ul>
+        </div>
+        <div id="nav-right" class="nav-right">
+            <div class="search">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" placeholder="search for products, brands and more"></input>
+            </div>
+            <div class="profile">
+                <i class="fa-solid fa-user"></i>
+                <p>Profile</p>
+                <div class="dropdown">
+                    <ul>
+                        <li><a href="profile.html">Your Profile</a></li>
+                        <li><a href="savedaddress.html">Saved Address</a></li>
+                        <li><a href="getorder.html">Orders</a></li>
+                        <li><a href="#">Contact Us</a></li>
+                        <li><a href="#">Settings</a></li>
+                        <li id="logout"><a href="#">Log Out</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div>
+                <i class="fa-regular fa-heart"></i>
+                <p>WishList</p>
+            </div>
+            <div>
+                <i class="fas fa-shopping-cart"></i>
+                <p id="cart"><a href="cart.html">Cart</a></p>
+            </div>
+        </div>
+    </nav>
+    <div id="addresslist" class="addresslist">
+        <h2>Add Your Address</h2>
+
+        <label for="name">Name:</label>
+        <input type="text" id="name" placeholder="Name" required>
+
+        <label for="pincode">Pincode:</label>
+        <input type="text" id="pincode" placeholder=" pincode" required>
+
+        <label for="state">State:</label>
+        <input type="text" id="state" placeholder=" state" required>
+
+        <label for="address">Address:</label>
+        <input type="text" id="address" placeholder=" address" required>
+
+        <label for="city">City:</label>
+        <input type="text" id="city" placeholder=" city" required>
+
+        <label for="landmark">Landmark:</label>
+        <input type="text" id="landmark" placeholder=" landmark">
+
+        <div class="buttons">
+            <button id="save">Save</button>
+            <button id="cancel">Cancel</button>
+        </div>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Details</title>
+    <link rel="stylesheet" href="order.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+</head>
+
+<body>
+    <div class="container">
+        <h2>Order Details</h2>
+        <div class="order-details">
+            <!-- <p><strong>Date Ordered:</strong> Nov 3, 2024</p>
+            <p><strong>Order Number:</strong> NG20231589</p> -->
+        </div>
+
+        <h2>Delivery Details</h2>
+        <!-- <div class="address">
+            <p>glo</p>
+
+        </div> -->
+        <div class="delivery-details">
+            <div class="item">
+                <!-- <img src="download (1).jpeg">
+                <p><strong>Shoes</strong><br>Color: Black<br>Price: 1000.00<br>Qty: 1</p> -->
+            </div>
+            <div class="item">
+                <!-- <img src="download.jpeg">
+                <p><strong>Tshirt for women</strong><br>Color: White<br>Price: 1000.00<br>Qty: 1</p> -->
+            </div>
+        </div>
+
+        <h2>Order Total</h2>
+        <div class="order-total">
+            <p><strong>Subtotal:</strong> 2000</p>
+            <p><strong>Shipping:</strong> Free</p>
+            <p><strong>Total:</strong> 2000</p>
+        </div>
+        <div class="button">
+            <button id="track">Track Order</button>
+            <button id="cancel">Cancel Order</button>
+        </div>
+    </div>
+    <script>
+        $(function () {
+            const token = localStorage.getItem('access_token');
+
+            if (!token) {
+                alert('No access token found. Please login.');
+                return;
+            }
+            const orderId = localStorage.getItem('order_id');
+
+            console.log(orderId);
+            if (!orderId) {
+                alert("Order ID is not found.");
+                return;
+            }
+
+            fetch("http://127.0.0.1:8000/orders/", {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                }
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log("Fetched Orders:", data);
+
+                    if (data.length === 0) {
+                        $(".order-details").html('<p>No orders found.</p>');
+                        return;
+                    }
+
+                    const order = data.find(order => order.id == orderId);
+                    console.log(order)
+
+                    if (!order) {
+                        $(".order-details").html('<p>Order not found.</p>');
+                        return;
+                    }
+
+                    $(".order-details").html(`
+                    <div class="order-item">
+                        <p><strong>Order Number:</strong> ${order.id}</p>
+                            <p><strong>Date Ordered:</strong> ${new Date(order.order_date).toLocaleString()}</p>
+                        <p><strong>Order Status:</strong> ${order.status}</p>
+                        <div class="progress-bar">
+                            <div class="progress" style="width:50%;"></div> 
+                        </div>
+                    </div>
+                `);
+                })
+                .catch(error => {
+                    console.error('Error fetching orders:', error);
+                    alert('Failed to fetch order details.');
+                });
+
+            fetch(`http://127.0.0.1:8000/orders/items/${orderId}/`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                }
+
+            })
+                .then(response => response.json())
+                .then(items => {
+                    console.log("Fetched Order Items:", items);
+                    if (!items || items.length === 0) {
+                        $(".delivery-details").html('<p>No items found in this order.</p>');
+                        return;
+                    }
+                    $(".delivery-details").html("");
+                    items.forEach(item => {
+                        console.log('item:', item)
+
+                        const product = item.product || {};
+                        const address = item.address || {};
+                        const productImage = product.images && product.images.length > 0 ? product.images[0] : 'default-image.jpg';
+                        console.log(productImage)
+
+                        $(".delivery-details").append(`
+                            <div class="item">
+                                <img src="http://localhost:8000${productImage}" alt="Product Image" style="width: 100px; height: 100px;"> 
+                                <p><strong>${product.name}</strong><br>
+                                Price: ${product.price}<br>
+                                Quantity: ${item.quantity}</p>
+                        `);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error fetching order items:', error);
+                    alert('Failed to fetch order items.');
+                });
+
+
+
+
+
+
+
+
+        });
+
+
+    </script>
+
+
+</body>
+
+</html>

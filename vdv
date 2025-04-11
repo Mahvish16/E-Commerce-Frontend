@@ -1,0 +1,34 @@
+ <h2>Delivery Details</h2>
+        <div class="delivery-details">
+            <div class="item">
+                <img src="download (1).jpeg">
+                <p><strong>Shoes</strong><br>Color: Black<br>Price: 1000.00<br>Qty: 1</p>
+            </div>
+            <div class="item">
+                <img src="download.jpeg">
+                <p><strong>Tshirt for women</strong><br>Color: White<br>Price: 1000.00<br>Qty: 1</p>
+            </div>
+        </div>
+
+        <h2>Order Total</h2>
+        <div class="order-total">
+            <p><strong>Subtotal:</strong> 2000</p>
+            <p><strong>Shipping:</strong> Free</p>
+            <p><strong>Total:</strong> 2000</p>
+        </div>
+        <div class="button">
+            <button id="track">Track Order</button>
+            <button id="cancel">Cancel Order</button>
+        </div>
+    </div>
+    </div>
+    </div>
+    </div>
+</div>
+
+
+
+// <p><strong>Address:</strong><br>
+    // ${address.street || 'N/A'}<br>
+    // ${address.city || 'N/A'}, ${address.state || 'N/A'} ${address.zipcode || 'N/A'}<br>
+    // ${address.landmark || 'No Landmark'}</p>

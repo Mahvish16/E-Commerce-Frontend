@@ -1,0 +1,157 @@
+nav {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 94%;
+    margin: 0 auto;
+}
+
+.nav-left,
+.nav-right {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.nav-left ul li {
+    list-style: none;
+    display: inline-block;
+    margin: 0 15px;
+    font-weight: 600;
+    font-style: normal;
+    color: rgb(34, 33, 33);
+
+
+}
+
+
+.search {
+    width: 350px;
+    border-radius: 4px;
+    line-height: 30px;
+    background: #f0eeee;
+}
+
+.search input {
+    background: transparent;
+    border: 0;
+    outline: none;
+    width: 85%;
+    font-size: 12px;
+}
+
+.nav-right .search i {
+    font-size: 12px;
+    color: #727070;
+
+}
+
+.nav-right div {
+    margin: 0 10px;
+    text-align: center;
+}
+
+.profile {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.profile i,
+.profile p {
+    font-size: 12px;
+    font-weight: 700;
+    color: #383638;
+}
+
+.dropdown {
+    display: none;
+    position: absolute;
+    top: 40px;
+    right: 0;
+    background-color: white;
+    border: 1px solid #ddd;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    z-index: 1;
+    min-width: 150px;
+}
+
+.dropdown ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.dropdown ul li {
+    padding: 10px;
+    text-align: left;
+}
+
+.dropdown ul li a {
+    text-decoration: none;
+    color: black;
+}
+
+.dropdown ul li:hover {
+    background-color: #f1f1f1;
+    transition: all 0.5s ease 3s;
+}
+
+.profile:hover .dropdown {
+    display: block;
+}
+
+.nav-right div p {
+    font-size: 12px;
+    font-weight: 700;
+    color: #383638;
+}
+
+.nav-right div i {
+    font-size: 18px;
+    color: #060606;
+
+}
+
+.img {
+    width: 50%;
+    height: 100%;
+    position: relative;
+
+}
+
+.img img {
+    width: 200%;
+    object-fit: cover;
+}
+
+/* getaddresses */
+
+.addresseslists {
+    width: 50%;
+    margin: 20px auto;
+    padding: 15px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background-color: #f9f9f9;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+#contents {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 10px;
+}
+
+#content input[type="radio"] {
+    margin-bottom: 10px;
+}
+
+#content p {
+    margin: 5px 0;
+    font-size: 16px;
+    color: #010000;
+    font-weight: 500;
+}

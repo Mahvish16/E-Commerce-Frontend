@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Page Title</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+
+<body>
+    <nav>
+        <div class="nav-left">
+            <a href="#" class="logo">Logo</a>
+            <ul class="nav-menu">
+                <li><a href="fashion.html">Fashion</a> </li>
+                <li><a href="electronic.html">Electronic</a></li>
+                <li><a href="homecate.html">Home</a></li>
+                <li><a href="toys.html">Toys</a></li>
+                <li><a href="beauty.html">Beauty</a></li>
+                <li><a href="appliances.html">Aplliances</a></li>
+            </ul>
+        </div>
+        <div class="nav-right">
+            <div class="search">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" placeholder="search for products, brands and more"></input>
+            </div>
+            <div>
+                <i class="fa-solid fa-user"></i>
+                <p>Profile</p>
+                <div class="dropdown">
+                    <ul>
+                        <li><a href="profile.html">Your Profile</a></li>
+                        <li><a href="savedaddress.html">Saved Address</a></li>
+                        <li><a href="getorder.html">Orders</a></li>
+                        <li><a href="#">Contact Us</a></li>
+                        <li><a href="#">Settings</a></li>
+                        <li id="logout">Log Out</li>
+                    </ul>
+                </div>
+            </div>
+            <div>
+                <i class="fa-regular fa-heart"></i>
+                <p>WishList</p>
+            </div>
+            <div>
+                <i class="fas fa-shopping-cart"></i>
+                <p><a href="cart.html">Cart</a></p>
+            </div>
+        </div>
+    </nav>
+    <div class="cart-container">
+        <div class="addresses">
+            <label for="address" id="select-address">Select Address:</label>
+            <div id="address-dropdown" class="address-list hidden"></div>
+
+
+
+
+
+        </div>
+        <div class="cart-items">
+            <!-- <div class="cart-item">
+                <img src="images.jpeg" alt="Earbuds">
+                <div class="item-details">
+                    <h2>Earbuds</h2>
+                    <p>fqfafaqq</p>
+                    <h6>₹1000.00</h6>
+                    <label for="quantity">Quantity:</label>
+                    <input type="number" id="quantity" name="quantity" min="1" max="10" value="1">
+                </div>
+                <button class="remove-btn">Remove</button>
+            </div> -->
+            <!-- <div class="cart-item">
+                <img src="download (1).jpeg" alt="Shoes">
+                <div class="item-details">
+                    <h2>Shoes</h2>
+                    <p>fqfafaqq</p>
+                    <h6>₹1000.00</h6>
+                    <label for="quantity">Quantity:</label>
+                    <input type="number" id="quantity" name="quantity" min="1" max="10" value="1">
+                </div>
+                <button class="remove-btn">Remove</button>
+            </div>
+            <div class="cart-item">
+                <img src="download.jpeg" alt="Lining Tops">
+                <div class="item-details">
+                    <h2>Lining Tops</h2>
+                    <p>fqfafaqq</p>
+                    <h6>₹1000.00</h6>
+                    <label for="quantity">Quantity:</label>
+                    <input type="number" id="quantity" name="quantity" min="1" max="10" value="1">
+
+                </div>
+                <button class="remove-btn">Remove</button>
+            </div>
+            <div class="cart-item">
+                 <img src="download.jpeg" alt="Lining Tops">
+                <div class="item-details">
+                    <h2>Lining Tops</h2>
+                    <p>fqfafaqq</p>
+                    <h6>₹1000.00</h6>
+                    <label for="quantity">Quantity:</label>
+                    <input type="number" id="quantity" name="quantity" min="1" max="10" value="1">
+                </div>
+                <button class="remove-btn">Remove</button> 
+            </div> -->
+        </div>
+
+        <div class="cart-summary">
+            <h3>Total: Rs.<span id="total-price">0.00</span></h3>
+            <!-- <button class="checkout-btn" id="checkout-btn"> Proceed to
+                COD </button> -->
+        </div>
+    </div>
+    <script>
+        $(function () {
+            const token = localStorage.getItem('access_token');
+
+            if (!token) {
+                alert('No access token found. Please login.');
+                return;
+            }
+            function fetchAddresses() {
+                fetch(`http://127.0.0.1:8000/addresses/`, {
+                    method: "GET",
+                    headers: {
+                        "Authorization": `Bearer ${token}`,
+                        "Content-Type": "application/json",
+                    }
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        $("#address-dropdown").empty();
+                        if (data.length === 0) {
+                            $("#address-dropdown").append("<p>No saved addresses found.</p>");
+                            return;
+                        }
+
+                        data.forEach((address, index) => {
+                            let addressHTML = `
+                        <div class="address-item">
+                            <input type="radio" name="selected-address" value="${address.id}" id="address-${address.id}" ${index === 0 ? "checked" : ""}>
+                            <label for="address-${address.id}">
+                                <strong>${address.address}</strong>, ${address.city}, ${address.state} - ${address.zipcode}
+                                <br><small>Landmark: ${address.landmark}</small>
+                            </label>
+                        </div>
+                    `;
+                            $("#address-dropdown").append(addressHTML);
+                        });
+                    })
+                    .catch(error => console.error("Error:", error));
+            }
+
+            $("#select-address").click(function () {
+                $("#address-dropdown").toggleClass("hidden");
+            });
+
+            fetchAddresses();
+
+
+
+            function fetchCartItems() {
+                fetch(`http://127.0.0.1:8000/cart-items/`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json',
+                    }
+                })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error("Failed to fetch cart items");
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        let totalPrice = 0;
+
+                        data.forEach(item => {
+                            let product = item.product;
+                            let productImage = product.images && product.images.length > 0 ? product.images[0] : 'default-image.jpg';
+
+                            let cartItemHTML = `
+                            <div class="cart-item" id="${item.id}"data-product-id="${product.id}" >
+                                <img src="http://localhost:8000${productImage}" alt="${product.name}">
+                                <div class="item-details">
+                                    <h2>${product.name}</h2>
+                                    <p>${product.description}</p>
+                                    <h6>Rs.${product.price.toFixed(2)}</h6>
+                                    <label for="quantity-${item.id}">Quantity:</label>
+                                    <input type="number" id="quantity-${item.id}" name="quantity" value="${item.quantity}">
+                                </div>
+                                <button class="remove-btn" data-id="${item.id}">Remove</button>
+                            </div>
+                            
+                        `;
+
+                            $(".cart-items").append(cartItemHTML);
+                            totalPrice += product.price * item.quantity;
+                        });
+
+                        $("#total-price").text(totalPrice.toFixed(2));
+
+
+
+                        $(".remove-btn").click(removeCartItem);
+                    })
+                    .catch(error => console.error("Error:", error));
+            }
+
+            function removeCartItem() {
+                let itemId = $(this).data("id");
+
+                fetch(`http://127.0.0.1:8000/cart-items/${itemId}/`, {
+                    method: "DELETE",
+                    headers: {
+                        "Authorization": `Bearer ${token}`,
+                        "Content-Type": "application/json"
+                    }
+                })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error("Failed to remove item");
+                        }
+                        fetchCartItems();
+                    })
+                    .catch(error => console.error("Error:", error));
+            }
+            fetchCartItems();
+            const checkoutButtonHTML = `
+              <button class="checkout-btn" id="checkout-btn" >Proceed to COD</button>
+            `;
+            $(".cart-summary").append(checkoutButtonHTML);
+            $("#checkout-btn").click(function (e) {
+                e.preventDefault();
+                let cartItems = [];
+                $(".cart-item").each(function () {
+                    let itemId = $(this).attr("id");
+                    let quantity = $(`#quantity-${itemId}`).val();
+                    let productId = $(this).data('product-id');
+                    console.log(productId)
+                    let price = parseFloat($(this).find('h6').text().replace('Rs.', ''));
+                    let totalAmount = price * quantity;
+                    cartItems.push({
+                        "id": itemId,
+                        "product": productId,
+                        "quantity": quantity,
+                        "price": price,
+                        "total_amount": totalAmount
+                    });
+                });
+
+                let selectedAddressId = $("input[name='selected-address']:checked").val();
+                if (!selectedAddressId) {
+                    alert("Please select an address");
+                    return;
+                }
+
+                if (cartItems.length === 0) {
+                    alert("Your cart is empty");
+                    return;
+                }
+                fetch("http://127.0.0.1:8000/orders/items/bulk/", {
+                    method: "POST",
+                    headers: {
+                        "Authorization": `Bearer ${token}`,
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        order_items: cartItems,
+                        address_id: selectedAddressId
+                    })
+                })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error("Failed to create order");
+                        }
+                        return response.json();
+                    })
+                    .then(orderdata => {
+                        console.log("Full Order Response:", orderdata);
+
+                        if (orderdata.order_items && orderdata.order_items.length > 0) {
+                            const orderId = orderdata.order_id || (orderdata.order_items?.length ? orderdata.order_items[0].order : null);
+
+                            console.log("Extracted Order ID:", orderId);
+
+                            if (orderId) {
+                                localStorage.setItem("order_id", orderId)
+                                setTimeout(() => {
+                                    window.location.href = `orderpage.html`;
+                                }, 500)
+                            } else {
+                                alert("Failed to create order. Order ID is missing.");
+                            }
+                        } else {
+                            alert("Order items are missing. Cannot retrieve Order ID.");
+                        }
+
+                    })
+                    .catch(error => {
+                        console.error("Error:", error);
+                        alert("Failed to place the order");
+                    });
+            });
+
+
+        })
+
+    </script>
+
+
+
+
+</body>
+
+</html>

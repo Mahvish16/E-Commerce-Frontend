@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Page Title</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+</head>
+
+<body>
+    <nav>
+        <div class="nav-left">
+            <a href="#" class="logo">Logo</a>
+            <ul class="nav-menu">
+                <li id="fashion"><a href="fashion.html">Fashion</a> </li>
+                <li id="electronic"><a href="electronic.html">Electronic</a></li>
+                <li id='home'><a href="homecate.html">Home</a></li>
+                <li id="toys"><a href="toys.html">Toys</a></li>
+                <li id="beauty"><a href="beauty.html">Beauty</a></li>
+                <li id="appliances"><a href="appliances.html">Aplliances</a></li>
+            </ul>
+        </div>
+        <div class="nav-right">
+            <div class="search">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" placeholder="search for products, brands and more"></input>
+            </div>
+            <div class="profile">
+                <i class="fa-solid fa-user"></i>
+                <p>Profile</p>
+                <div class="dropdown">
+                    <ul>
+                        <li><a href="profile.html">Your Profile</a></li>
+                        <li><a href="savedaddress.html">Saved Address</a></li>
+                        <li><a href="getorder.html">Orders</a></li>
+                        <li><a href="#">Contact Us</a></li>
+                        <li><a href="#">Settings</a></li>
+                        <li id="logout"><a href="#">Log Out</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div>
+                <i class="fa-regular fa-heart"></i>
+                <p>WishList</p>
+            </div>
+            <div>
+                <i class="fas fa-shopping-cart"></i>
+                <p><a href="cart.html">Cart</a></p>
+            </div>
+        </div>
+    </nav>
+    <div class="savadd">
+        <h2>Saved Addresses</h2>
+        <button id="sav" class="btn"><a href="address.html">+ ADD NEW ADDRESS</a></button>
+
+        <div class="addresscard">
+            <!--  <h3>Mahvish Ruhi <span class="home-badge">HOME</span></h3>
+            <p>Beside paras Tailor Shop, Badi Sangat, Jehanabad</p>
+            <p>Jehanabad H.O</p>
+            <p>Jehanabad - 804408</p>
+            <p>Bihar</p>
+            <p>Mobile: 529860280</p> -->
+            <!-- <div class="actions">
+                <a href="#" class="edit">EDIT</a>
+                <a href="#" id="remove" class="remove">REMOVE</a> 
+            </div> -->
+        </div>
+
+        <!-- <h3>Other Addresses</h3> -->
+
+
+
+    </div>
+    <script>
+        $(function () {
+            const token = localStorage.getItem('access_token');
+            if (!token) {
+                alert("No Access Token Found !!--");
+                return;
+            }
+            fetch(`http://127.0.0.1:8000/addresses/`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                }
+
+            })
+                .then(response => response.json())
+                .then(data => {
+                    data.forEach(data => {
+                        console.log(data)
+                        let addressHTML = `
+                            <div class="address-card" id="${data.id}">
+                                <h3>${data.name} </h3>
+                                <p>${data.address}</p>
+                                <p>${data.city}</p>
+                                <p>${data.states}</p>
+                                <p>${data.zipcode}</p>
+                                <p>${data.landmark}</p>
+                                <div class="actions">
+                                    <a href="#" class="edit" data-id="${data.id}">EDIT</a>
+                                    
+                                   <button class="remove" data-id= "${data.id}">Remove</button>
+                                </div>
+                            </div>
+                        `;
+                        $(".addresscard").append(addressHTML);
+                    })
+                })
+                .catch(error => console.error("Error:", error));
+            $(".addresscard").on('click', '.remove', function () {
+                let addressId = $(this).data("id");
+                console.log('address:', addressId)
+
+                fetch(`http://127.0.0.1:8000/addresses/${addressId}/`, {
+                    method: "DELETE",
+                    headers: {
+                        "Authorization": `Bearer ${token}`,
+                        "Content-Type": "application/json"
+                    }
+                })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error("Failed to remove address");
+                        }
+                        alert('Address removed successfully');
+                        window.location.reload();
+
+                    })
+                    .catch(error => console.error("Error:", error));
+            })
+            $(".addresscard").on('click', '.edit', function () {
+                let addressId = $(this).data("id");
+                console.log('address:', addressId)
+                localStorage.setItem("addressId", addressId);
+                window.location.href = "editaddress.html";
+
+
+            })
+
+
+
+
+
+        })
+    </script>
+
+
+
+
+
+
+</body>
+
+</html>

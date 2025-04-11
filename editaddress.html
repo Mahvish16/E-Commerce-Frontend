@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Your Address</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+</head>
+
+<body>
+    <nav id="navbar">
+        <div id="nav-left" class="nav-left">
+            <a href="#" class="logo">Logo</a>
+            <ul class="nav-menu">
+                <li id="fashion"><a href="fashion.html">Fashion</a> </li>
+                <li id="electronic"><a href="electronic.html">Electronic</a></li>
+                <li id='home'><a href="homecate.html">Home</a></li>
+                <li id="toys"><a href="toys.html">Toys</a></li>
+                <li id="beauty"><a href="beauty.html">Beauty</a></li>
+                <li id="appliances"><a href="appliances.html">Aplliances</a></li>
+
+            </ul>
+        </div>
+        <div id="nav-right" class="nav-right">
+            <div class="search">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" placeholder="search for products, brands and more"></input>
+            </div>
+            <div class="profile">
+                <i class="fa-solid fa-user"></i>
+                <p>Profile</p>
+                <div class="dropdown">
+                    <ul>
+                        <li><a href="profile.html">Your Profile</a></li>
+                        <li><a href="savedaddress.html">Saved Address</a></li>
+                        <li><a href="getorder.html">Orders</a></li>
+                        <li><a href="#">Contact Us</a></li>
+                        <li><a href="#">Settings</a></li>
+                        <li id="logout"><a href="#">Log Out</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div>
+                <i class="fa-regular fa-heart"></i>
+                <p>WishList</p>
+            </div>
+            <div>
+                <i class="fas fa-shopping-cart"></i>
+                <p id="cart"><a href="cart.html">Cart</a></p>
+            </div>
+        </div>
+    </nav>
+    <div id="addresslist" class="addresslist">
+        <h2>Edit Your Address</h2>
+
+        <label for="name">Name:</label>
+        <input type="text" id="name" placeholder="Name" required>
+
+        <label for="pincode">Pincode:</label>
+        <input type="text" id="pincode" placeholder=" pincode" required>
+
+        <label for="state">State:</label>
+        <input type="text" id="state" placeholder=" state" required>
+
+        <label for="address">Address:</label>
+        <input type="text" id="address" placeholder=" address" required>
+
+        <label for="city">City:</label>
+        <input type="text" id="city" placeholder=" city" required>
+
+        <label for="landmark">Landmark:</label>
+        <input type="text" id="landmark" placeholder=" landmark">
+
+        <div class="buttons">
+            <button id="save">Save</button>
+            <button id="cancel">Cancel</button>
+        </div>
+    </div>
+    <script>
+        const token = localStorage.getItem('access_token');
+        console.log(token)
+        const addressId = localStorage.getItem('addressId');
+        console.log(addressId)
+
+        if (!token) {
+            alert("No Access Token Found and No address_id found!!--");
+
+        }
+
+        fetch(`http://127.0.0.1:8000/addresses/${addressId}/`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            },
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data)
+                $('#name').val(data.name);
+                $('#pincode').val(data.zipcode);
+                $('#state').val(data.state);
+                $('#address').val(data.address);
+                $('#city').val(data.city);
+                $('#landmark').val(data.landmark);
+            })
+            .catch(error => console.error('Error:', error));
+        $("#save").on('click', function () {
+            const name = $('#name').val();
+            const pincode = $('#pincode').val();
+            const state = $('#state').val();
+            const address = $('#address').val();
+            const city = $('#city').val();
+            const landmark = $('#landmark').val();
+            const addressId = localStorage.getItem('addressId');
+            const token = localStorage.getItem('access_token');
+            fetch(`http://127.0.0.1:8000/addresses/${addressId}/`, {
+                method: 'PATCH',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    name: name,
+                    address: address,
+                    city: city,
+                    state: state,
+                    landmark: landmark,
+                    zipcode: pincode
+                })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data)
+                    alert("Address Updated Successfully");
+                    window.location.href = "savedaddress.html";
+                })
+                .catch(error => console.error('Error:', error));
+
+        })
+    </script>
+</body>
+
+</html>
