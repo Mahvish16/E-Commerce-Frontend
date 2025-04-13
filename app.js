@@ -108,7 +108,7 @@ $(function () {
 })
 
 $(function () {
-    $('#resetrequestform').on('click', function (event) {
+    $('#resetrequestform').on('submit', function (event) {
         event.preventDefault();
         const email = $('#email').val().trim();
         console.log('email', email)
@@ -181,7 +181,15 @@ $(function () {
                     }, 1500);
                 }
                 else {
-                    $('#responseMessage').text(data.error).css("color", "red");
+                    if (data.password && data.password.length > 0) {
+                        const password = data.password[0];
+                        console.log(password)
+
+                        $('#responseMessage').text(password).css("color", "red");
+                    }
+                    else if (data.error) {
+                        $('#responseMessage').text(data.error).css("color", "red");
+                    }
                 }
             })
             .catch(error => {
